@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Criar Jogos no Celular com IA (Sem Saber Programar)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Variáveis CSS para cores */
+        :root {
+            --primary-blue: #007bff;
+            --neon-green: #39ff14;
+            --dark-gray: #1a1a1a;
+            --light-gray: #f4f4f4;
+            --white: #ffffff;
+            --text-color: #e0e0e0;
+        }
+
+        /* Estilos globais para o corpo da página */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-gray);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden; /* Evita barra de rolagem horizontal */
+        }
+
+        /* Container para centralizar o conteúdo */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Cabeçalho */
+        header {
+            background-color: var(--dark-gray);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            position: sticky; /* Fixa o cabeçalho no topo */
+            top: 0;
+            z-index: 1000; /* Garante que o cabeçalho fique acima de outros elementos */
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--neon-green);
+            text-decoration: none;
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.7); /* Efeito neon no logo */
+        }
+
+        .btn-header {
+            background-color: var(--neon-green);
+            color: var(--dark-gray);
+            padding: 10px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.6); /* Sombra neon no botão */
+        }
+
+        .btn-header:hover {
+            background-color: #2eff00; /* Cor mais clara ao passar o mouse */
+            transform: translateY(-2px); /* Efeito de "levantar" */
+        }
+
+        /* Seção Hero (banner principal) */
+        .hero {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #0a0a0a 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Imagem de fundo com opacidade para efeito visual */
+            background: url('https://placehold.co/1600x900/1a1a1a/ffffff?text=Crie+Jogos+com+IA') no-repeat center center/cover;
+            opacity: 0.2;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInScale 1s ease-out; /* Animação de entrada */
+        }
+
+        .hero h1 {
+            font-size: 3.2em;
+            color: var(--white);
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 0 0 15px rgba(0, 123, 255, 0.7); /* Sombra azul no título */
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-hero {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.6); /* Sombra azul no botão */
+        }
+
+        .btn-hero:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+        }
+
+        /* Seção "Sobre o Curso" */
+        .about {
+            background-color: #1a1a1a;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .about h2 {
+            font-size: 2.5em;
+            color: var(--neon-green);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+
+        .about p {
+            font-size: 1.1em;
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            color: var(--text-color);
+        }
+
+        /* Seção de Benefícios */
+        .benefits {
+            background-color: var(--dark-gray);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .benefits h2 {
+            font-size: 2.5em;
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Layout responsivo em grid */
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .benefit-item {
+            background-color: #282828;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 20px rgba(57, 255, 20, 0.4);
+        }
+
+        .benefit-item i {
+            font-size: 3em;
+            color: var(--neon-green);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.7);
+        }
+
+        .benefit-item h3 {
+            font-size: 1.4em;
+            color: var(--white);
+            margin-bottom: 10px;
+        }
+
+        .benefit-item p {
+            font-size: 0.95em;
+            color: var(--text-color);
+        }
+
+        /* Seção de Depoimentos */
+        .testimonials {
+            background-color: #1a1a1a;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .testimonials h2 {
+            font-size: 2.5em;
+            color: var(--neon-green);
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-item {
+            background-color: #282828;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            text-align: left;
+            position: relative;
+        }
+        
+        .testimonial-item::before {
+            content: '“'; /* Aspas grandes como elemento decorativo */
+            font-family: serif;
+            font-size: 4em;
+            color: rgba(57, 255, 20, 0.3);
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            z-index: 0;
+        }
+
+        .testimonial-item p {
+            font-style: italic;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            position: relative;
+            z-index: 1; /* Garante que o texto fique acima das aspas */
+        }
+
+        .testimonial-item .author {
+            font-weight: 600;
+            color: var(--primary-blue);
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Seção "O que você vai aprender" */
+        .learn {
+            background-color: var(--dark-gray);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .learn h2 {
+            font-size: 2.5em;
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        .learn-list {
+            list-style: none;
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .learn-list li {
+            background-color: #282828;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .learn-list li:hover {
+            transform: translateX(5px); /* Efeito de deslize ao passar o mouse */
+        }
+
+        .learn-list li i {
+            color: var(--neon-green);
+            font-size: 1.5em;
+            margin-right: 15px;
+            text-shadow: 0 0 8px rgba(57, 255, 20, 0.6);
+        }
+
+        .learn-list li span {
+            font-size: 1.1em;
+            color: var(--white);
+        }
+
+        /* Seção de Preço */
+        .pricing {
+            background-color: #1a1a1a;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .pricing h2 {
+            font-size: 2.5em;
+            color: var(--neon-green);
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+
+        .price-box {
+            background-color: #282828;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 450px;
+            margin: 0 auto;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--primary-blue); /* Borda destacada */
+            animation: bounceIn 0.8s ease-out; /* Animação de entrada */
+        }
+
+        .price-box .old-price {
+            font-size: 1.5em;
+            color: #888;
+            text-decoration: line-through; /* Preço antigo riscado */
+            margin-bottom: 10px;
+        }
+
+        .price-box .new-price {
+            font-size: 3.5em;
+            color: var(--neon-green);
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.8);
+        }
+
+        .price-box .guarantee {
+            font-size: 1em;
+            color: var(--text-color);
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .price-box .guarantee i {
+            color: var(--primary-blue);
+            margin-right: 10px;
+            font-size: 1.3em;
+        }
+
+        /* Seção Fale Conosco */
+        .contact-section {
+            background-color: var(--dark-gray);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-size: 2.5em;
+            color: var(--neon-green);
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+
+        .contact-info {
+            background-color: #282828;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-info p {
+            font-size: 1.1em;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .contact-info a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-info a:hover {
+            color: #0056b3;
+        }
+
+        .contact-info a i {
+            margin-right: 10px;
+            font-size: 1.3em;
+        }
+
+        /* Botões de Chamada para Ação (CTA) */
+        .cta-buttons {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: var(--dark-gray);
+        }
+
+        .cta-buttons .btn {
+            display: inline-block;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+        }
+
+        .cta-buttons .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 123, 255, 0.8);
+        }
+
+        .cta-buttons .btn-secondary {
+            background-color: var(--neon-green);
+            color: var(--dark-gray);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+        }
+
+        .cta-buttons .btn-secondary:hover {
+            background-color: #2eff00;
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.8);
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #0a0a0a;
+            color: var(--text-color);
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        footer .social-links a {
+            color: var(--white);
+            font-size: 1.8em;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        footer .social-links a:hover {
+            color: var(--neon-green);
+            transform: translateY(-3px);
+        }
+
+        footer .footer-text {
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        /* Animações */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Media Queries para Responsividade (Mobile First) */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero p {
+                font-size: 1em;
+            }
+
+            .btn-hero {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+
+            .benefits-grid, .testimonial-grid {
+                grid-template-columns: 1fr; /* Uma coluna em telas menores */
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn-header {
+                width: 100%;
+                text-align: center;
+            }
+
+            .cta-buttons .btn {
+                display: block;
+                margin: 15px auto;
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .logo {
+                font-size: 1.5em;
+            }
+
+            .about h2, .benefits h2, .testimonials h2, .learn h2, .pricing h2, .contact-section h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">🎮 IA Games</a>
+            <a href="#pricing" class="btn-header">Quero me inscrever agora!</a>
+        </div>
+    </header>
+
+    <!-- Seção Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Crie Jogos Incríveis no Celular com IA 🚀<br> (Mesmo Sem Saber Programar!)</h1>
+            <p>Transforme suas ideias em realidade! Aprenda a desenvolver jogos mobile usando as ferramentas mais inovadoras de Inteligência Artificial, de forma simples e divertida.</p>
+            <a href="#pricing" class="btn-hero">Quero Começar Agora!</a>
+        </div>
+    </section>
+
+    <!-- Seção Sobre o Curso -->
+    <section class="about container">
+        <h2>O Curso Perfeito Para Você!</h2>
+        <p>Se você tem entre 12 e 25 anos, é curioso(a), ama jogos e sempre quis criar os seus próprios, mas a programação parece um bicho de sete cabeças... Este curso é para você! Descubra como a Inteligência Artificial pode ser sua maior aliada na criação de jogos mobile, de forma totalmente gratuita e acessível.</p>
+        <p>Nosso objetivo é te guiar passo a passo, desde a ideia inicial até a publicação do seu jogo, para que você possa mostrar sua criação para amigos e família. Chega de só jogar, comece a criar!</p>
+    </section>
+
+    <!-- Seção de Benefícios -->
+    <section class="benefits container">
+        <h2>Por Que Este Curso é Para Você? ✨</h2>
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <i class="fas fa-brain"></i>
+                <h3>Crie Sem Programar</h3>
+                <p>Use o poder da IA para desenvolver jogos complexos sem escrever uma linha de código.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Do Celular Para o Mundo</h3>
+                <p>Todo o processo de criação e publicação diretamente do seu smartphone.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-dollar-sign"></i>
+                <h3>Ferramentas Gratuitas</h3>
+                <p>Aprenda a usar apps e plataformas de IA totalmente gratuitas e acessíveis.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-lightbulb"></i>
+                <h3>Liberte Sua Criatividade</h3>
+                <p>Transforme suas ideias mais loucas em jogos reais e funcionais.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-share-alt"></i>
+                <h3>Publique e Compartilhe</h3>
+                <p>Aprenda a gerar o APK do seu jogo e compartilhar com quem você quiser.</p>
+            </div>
+            <div class="benefit-item">
+                <i class="fas fa-gamepad"></i>
+                <h3>Diversão Garantida</h3>
+                <p>Crie jogos que você e seus amigos vão amar jogar e se orgulhar!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Depoimentos -->
+    <section class="testimonials container">
+        <h2>O Que Nossos Alunos Dizem 💬</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-item">
+                <p>"Eu sempre quis criar jogos, mas achava que era muito difícil. Com esse curso, descobri que a IA é uma mão na roda! Já fiz meu primeiro jogo de plataforma e meus amigos amaram!"</p>
+                <div class="author">- Lucas S., 16 anos</div>
+            </div>
+            <div class="testimonial-item">
+                <p>"Incrível como é fácil usar as ferramentas de IA que o curso ensina. Criei personagens e cenários que nem imaginava que conseguiria. Valeu cada centavo!"</p>
+                <div class="author">- Mariana F., 20 anos</div>
+            </div>
+            <div class="testimonial-item">
+                <p>"Para quem, como eu, não sabe programar nada, este curso é um divisor de águas. A didática é ótima e as dicas de como publicar o jogo foram essenciais. Recomendo demais!"</p>
+                <div class="author">- Rafael G., 23 anos</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção "O que você vai aprender" -->
+    <section class="learn container">
+        <h2>O Que Você Vai Aprender no Curso? 📚</h2>
+        <ul class="learn-list">
+            <li><i class="fas fa-gamepad"></i> <span>A criar jogos do zero, mesmo sem ter experiência em programação.</span></li>
+            <li><i class="fas fa-robot"></i> <span>A usar aplicativos de Inteligência Artificial para te auxiliar em todas as etapas (Leonardo AI, Luma AI, PixelArt AI e mais!).</span></li>
+            <li><i class="fas fa-paint-brush"></i> <span>A desenvolver personagens, cenários, trilhas sonoras e menus de jogo diretamente no seu celular.</span></li>
+            <li><i class="fas fa-android"></i> <span>A gerar arquivos APKs e instalar seus jogos em qualquer celular Android.</span></li>
+            <li><i class="fas fa-store"></i> <span>A montar uma "lojinha" simples para divulgar e até vender seu jogo.</span></li>
+            <li><i class="fas fa-star"></i> <span>Dicas e truques para otimizar seus jogos e deixá-los ainda mais profissionais.</span></li>
+        </ul>
+    </section>
+
+    <!-- Seção de Preço e CTA final -->
+    <section class="pricing container" id="pricing">
+        <h2>Garanta Sua Vaga Agora! 💰</h2>
+        <div class="price-box">
+            <span class="old-price">De R$9,90</span> <!-- Preço antigo atualizado para R$9,90 -->
+            <div class="new-price">Por apenas R$5,00</div>
+            <a href="#" class="btn-hero">Garanta sua Vaga Agora!</a>
+            <p class="guarantee"><i class="fas fa-shield-alt"></i> Garantia Incondicional de 7 Dias!</p>
+            <p>Se você não gostar do curso, por qualquer motivo, devolvemos seu dinheiro. Sem perguntas!</p>
+        </div>
+    </section>
+
+    <!-- Nova Seção Fale Conosco -->
+    <section class="contact-section container">
+        <h2>Fale Conosco! 📞</h2>
+        <div class="contact-info">
+            <p>Tem alguma dúvida? Quer saber mais sobre o curso? Entre em contato conosco!</p>
+            <a href="mailto:scarpimzeze@gmail.com"><i class="fas fa-envelope"></i> scarpimzeze@gmail.com</a>
+            <a href="https://wa.me/5511999999999" target="_blank"><i class="fab fa-whatsapp"></i> Suporte via WhatsApp</a>
+        </div>
+    </section>
+
+    <!-- Botões de Chamada para Ação (CTA) adicionais -->
+    <section class="cta-buttons container">
+        <a href="#pricing" class="btn">Comece Seu Jogo Agora!</a>
+        <a href="#pricing" class="btn btn-secondary">Quero Criar Meu Primeiro Jogo!</a>
+    </section>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://youtube.com" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="footer-text">&copy; 2025 Scarpim Empresas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript para animações suaves de entrada -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.hero-content, .about h2, .about p, .benefits h2, .benefit-item, .testimonials h2, .testimonial-item, .learn h2, .learn-list li, .price-box, .contact-section h2, .contact-info, .cta-buttons .btn');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.style.animation = 'fadeInScale 1s ease-out forwards';
+                        observer.unobserve(entry.target); // Para a animação após ser vista
+                    }
+                });
+            }, { threshold: 0.1 }); // A animação dispara quando 10% do elemento está visível
+
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
